@@ -17,9 +17,12 @@ async function handler(_req: Request): Promise<Response> {
 
 const extractGuess = async (req: Request): Promise<any> => {
   const slackPayload: any = await req.formData();
-  const guess: any = await slackPayload.get("text")?.toString();
+  console.log("before the fall")
+  console.log(slackPayload)
+  console.log("after the fall")
+  const guess: string = await slackPayload.get("text")?.toString();
   if (!guess) {
-    throw Error("Guess is empty or null");
+    throw new Error("Guess is empty or null");
   }
   return guess;
 };
