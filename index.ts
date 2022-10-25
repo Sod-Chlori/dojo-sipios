@@ -2,9 +2,9 @@ import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 
 async function handler(_req: Request): Promise<Response> {
   try {
-    const wordToFind = "chien";
-    const guess = await extractGuess(_req);
-    const similarityResult = await similarity(guess, wordToFind);
+    const wordToFind: string = "chien";
+    const guess: any = await extractGuess(_req);
+    const similarityResult: any = await similarity(guess, wordToFind);
     console.log(
       `Tried with word ${guess}, similarity is ${similarityResult}, word to find is ${wordToFind}`
     );
@@ -15,16 +15,16 @@ async function handler(_req: Request): Promise<Response> {
   }
 }
 
-const extractGuess = async (req: Request) => {
-  const slackPayload = await req.formData();
-  const guess = await slackPayload.get("text")?.toString();
+const extractGuess = async (req: Request): Promise<any> => {
+  const slackPayload: any = await req.formData();
+  const guess: any = await slackPayload.get("text")?.toString();
   if (!guess) {
     throw Error("Guess is empty or null");
   }
   return guess;
 };
 
-const responseBuilder = (word: string, similarity: Number) => {
+const responseBuilder = (word: string, similarity: Number): any => {
   if (similarity == 1) {
     return `Well played ! The word was ${word}.`;
   } else if (similarity > 0.5) {
@@ -34,15 +34,15 @@ const responseBuilder = (word: string, similarity: Number) => {
   }
 };
 
-const similarity = async (word1, word2) => {
-  const body = {
+const similarity = async (word1: any, word2: any): Promise<any> => {
+  const body: any = {
     sim1: word1,
     sim2: word2,
     lang: "fr",
     type: "General Word2Vec",
   };
   console.log("body", body);
-  const similarityResponse = await fetch(
+  const similarityResponse: any = await fetch(
     "http://nlp.polytechnique.fr/similarityscore",
     {
       method: "POST",
@@ -53,7 +53,7 @@ const similarity = async (word1, word2) => {
     }
   );
   console.log("similarityResponse", similarityResponse);
-  const similarityResponseJson = await similarityResponse.json();
+  const similarityResponseJson: any = await similarityResponse.json();
   console.log("similarityValue", similarityResponseJson);
   return Number(similarityResponseJson.simscore);
 };
